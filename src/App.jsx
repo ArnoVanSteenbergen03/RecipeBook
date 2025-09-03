@@ -1,20 +1,25 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./components/Home";
 import Navigation from "./components/Navigation";
 import Recipes from "./components/Recipes";
 import Spices from "./components/Spices";
 import About from "./components/About";
+import Login from "./components/Login";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
+  const location = useLocation();
+  const showNav = location.pathname !== "/login";
   return (
     <div className="app-container">
-      <Navigation />
+      {showNav && <Navigation />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipes" element={<Recipes />} />
-        <Route path="/spices" element={<Spices />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+        <Route path="/recipes" element={<RequireAuth><Recipes /></RequireAuth>} />
+        <Route path="/spices" element={<RequireAuth><Spices /></RequireAuth>} />
+        <Route path="/about" element={<RequireAuth><About /></RequireAuth>} />
       </Routes>
     </div>
   );
