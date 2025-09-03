@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
 import app from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -58,6 +58,9 @@ function Login() {
         <button type="submit">Login</button>
       </form>
       <button onClick={handleGoogleLogin}>Login with Google</button>
+      <div style={{ marginTop: "1em" }}>
+        <Link to="/register">Don't have an account? Register</Link>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );

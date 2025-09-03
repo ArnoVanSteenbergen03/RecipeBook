@@ -6,16 +6,18 @@ import Recipes from "./components/Recipes";
 import Spices from "./components/Spices";
 import About from "./components/About";
 import Login from "./components/Login";
+import Register from "./components/Register";
 import RequireAuth from "./components/RequireAuth";
 
 function App() {
   const location = useLocation();
-  const showNav = location.pathname !== "/login";
+  const showNav = location.pathname !== "/login" && location.pathname !== "/register";
   return (
     <div className="app-container">
       {showNav && <Navigation />}
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
         <Route path="/recipes" element={<RequireAuth><Recipes /></RequireAuth>} />
         <Route path="/spices" element={<RequireAuth><Spices /></RequireAuth>} />
