@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const auth = getAuth();
@@ -12,7 +14,15 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Save name and lastname to Firestore
+      const { getFirestore, doc, setDoc } = await import("firebase/firestore");
+      const db = getFirestore();
+      await setDoc(doc(db, `users/${user.uid}/userData/${user.uid}`), {
+        name: firstName,
+        lastname: lastName
+      });
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -23,6 +33,18 @@ function Register() {
     <div>
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
         <input
           type="email"
           placeholder="Email"
