@@ -6,7 +6,6 @@ function Recipes() {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    // Fetch recipes from Firestore
     const fetchRecipes = async () => {
       const querySnapshot = await getDocs(collection(db, "recipes"));
       const recipesList = [];
@@ -18,11 +17,6 @@ function Recipes() {
 
     fetchRecipes();
   }, []);
-
-  // Example: Add a recipe (call this from a button or form, not on every render)
-  // const addRecipe = async () => {
-  //   await addDoc(collection(db, "recipes"), { name: "Pizza", ingredients: ["cheese", "tomato"] });
-  // };
 
   return (
     <div>

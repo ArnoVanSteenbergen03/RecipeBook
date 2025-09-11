@@ -12,9 +12,8 @@ function Navigation() {
   useEffect(() => {
     const fetchUserdata = async () => {
       const user = auth.currentUser;
-      console.log("Current user:", user);
       if (user) {
-        const userDataRef = doc(db, `users/${user.uid}/userData/${user.uid}`);
+        const userDataRef = doc(db, `users/${user.uid}`);
         const userDataSnap = await getDoc(userDataRef);
         if (userDataSnap.exists()) {
           setUserdata(userDataSnap.data());

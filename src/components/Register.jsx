@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import bcrypt from 'bcryptjs';
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -16,12 +17,14 @@ function Register() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      // Save name and lastname to Firestore
       const { getFirestore, doc, setDoc } = await import("firebase/firestore");
       const db = getFirestore();
-      await setDoc(doc(db, `users/${user.uid}/userData/${user.uid}`), {
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      await setDoc(doc(db, `users/${user.uid}`), {
         name: firstName,
-        lastname: lastName
+        lastname: lastName,
+        email: email,
+        password: hashedPassword
       });
       navigate("/");
     } catch (err) {
