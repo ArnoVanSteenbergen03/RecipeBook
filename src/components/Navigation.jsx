@@ -35,11 +35,34 @@ function Navigation() {
           Recipe book of {userdata.name} {userdata.lastname}
         </h1>
         <ul className="nav__list">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/recipes">Recipes</Link></li>
-          <li><Link to="/spices">Spices</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <button onClick={handleLogout}>Logout</button>
+          <li>
+            <Link className="nav__link" to="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link className="nav__link" to="/recipes">
+              Recipes
+            </Link>
+          </li>
+          <li>
+            <Link className="nav__link" to="/spices">
+              Spices
+            </Link>
+          </li>
+          <li>
+            <Link className="nav__link" to="/about">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link className="nav__link" to="/account">
+              Account
+            </Link>
+          </li>
+          <button className="nav__button" onClick={handleLogout}>
+            Logout
+          </button>
         </ul>
       </nav>
     </header>

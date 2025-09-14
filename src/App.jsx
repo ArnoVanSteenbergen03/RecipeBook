@@ -8,6 +8,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import RequireAuth from "./components/RequireAuth";
+import Account from "./components/Account";
 
 function App() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function App() {
         <Route path="/recipes" element={<RequireAuth><Recipes /></RequireAuth>} />
         <Route path="/spices" element={<RequireAuth><Spices /></RequireAuth>} />
         <Route path="/about" element={<RequireAuth><About /></RequireAuth>} />
+        <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />
       </Routes>
     </div>
   );

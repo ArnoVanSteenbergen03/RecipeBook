@@ -20,16 +20,25 @@ function Home() {
 
   return (
     <section className="section" id="home">
-      <div>Welcome to the Recipe Book</div>
+      <h1>Welcome to your Recipe Book</h1>
 
       <div>
-        <p>Discover a world of culinary delights with our Recipe Book app!</p>
         <h2>Public Recipes</h2>
+        <p>Discover a world of culinary delights with our Recipe Book app!</p>
         <ul>
           {publicRecipes.map((recipe) => (
             <li key={recipe.id}>
-              {recipe.name}:{" "}
-              {recipe.ingredients && recipe.ingredients.join(", ")}
+              <strong>{recipe.name}</strong>:{" "}
+              {Array.isArray(recipe.ingredients)
+                ? recipe.ingredients.join(", ")
+                : ""}
+              <br />
+              <strong>Tags:</strong>{" "}
+              {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
+                recipe.tags.join(", ")
+              ) : (
+                <span style={{ color: "#888" }}>No tags</span>
+              )}
             </li>
           ))}
         </ul>
