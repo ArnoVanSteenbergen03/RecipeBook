@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import CrudComponent from "./CRUD";
 import Modal from "./Modal";
+import { Link } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, getDocs, query, where, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 function Spices() {
@@ -63,27 +71,35 @@ function Spices() {
       <h1>Spices</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
         {spices.map((spice) => (
-          <div key={spice.id} style={{
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "1rem",
-            width: "250px",
-            background: "#fafafa"
-          }}>
-            <h3>{spice.name}</h3>
-            <p><strong>Description:</strong> {spice.description}</p>
-            <p>
-              <strong>Tags:</strong>{" "}
-              {Array.isArray(spice.tags)
-                ? spice.tags.join(", ")
-                : spice.tags}
-            </p>
-            <p><strong>Public:</strong> {spice.public ? "Yes" : "No"}</p>
-            <button onClick={() => handleEdit(spice)}>Edit</button>
-            <button onClick={() => handleDelete(spice.id)}>Delete</button>
-          </div>
+          <Link to={`/spices/${spice.id}`}>
+            <div
+              key={spice.id}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                padding: "1rem",
+                width: "250px",
+                background: "#fafafa",
+              }}
+            >
+              <h3>{spice.name}</h3>
+              <p>
+                <strong>Description:</strong> {spice.description}
+              </p>
+              <p>
+                <strong>Tags:</strong>{" "}
+                {Array.isArray(spice.tags) ? spice.tags.join(", ") : spice.tags}
+              </p>
+              <p>
+                <strong>Public:</strong> {spice.public ? "Yes" : "No"}
+              </p>
+              <button onClick={() => handleEdit(spice)}>Edit</button>
+              <button onClick={() => handleDelete(spice.id)}>Delete</button>
+            </div>
+          </Link>
         ))}
       </div>
+
       <button
         style={{
           fontSize: "2rem",

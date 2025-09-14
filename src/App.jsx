@@ -9,6 +9,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import RequireAuth from "./components/RequireAuth";
 import Account from "./components/Account";
+import RecipeDetail from "./components/RecipeDetail";
+import SpicesDetail from "./components/SpicesDetail";
 
 function App() {
   const location = useLocation();
@@ -24,6 +26,8 @@ function App() {
         <Route path="/spices" element={<RequireAuth><Spices /></RequireAuth>} />
         <Route path="/about" element={<RequireAuth><About /></RequireAuth>} />
         <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />
+        <Route path="/recipes/:id" element={<RequireAuth><RecipeDetail /></RequireAuth>} />
+        <Route path="/spices/:id" element={<RequireAuth><SpicesDetail /></RequireAuth>} />
       </Routes>
     </div>
   );

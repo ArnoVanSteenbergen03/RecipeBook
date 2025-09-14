@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CrudComponent from "./CRUD";
 import Modal from "./Modal";
+import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import {
   collection,
@@ -72,38 +73,40 @@ function Recipes() {
       <h1>Recipes</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
         {recipes.map((recipe) => (
-          <div
-            key={recipe.id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "1rem",
-              width: "250px",
-              background: "#fafafa",
-            }}
-          >
-            <h3>{recipe.name}</h3>
-            <p>
-              <strong>Ingredients:</strong>{" "}
-              {Array.isArray(recipe.ingredients)
-                ? recipe.ingredients.join(", ")
-                : recipe.ingredients}
-            </p>
-            <p>
-              <strong>Prep Time:</strong> {recipe.preptime}
-            </p>
-            <p>
-              <strong>Tags:</strong>{" "}
-              {Array.isArray(recipe.tags)
-                ? recipe.tags.join(", ")
-                : recipe.tags}
-            </p>
-            <p>
-              <strong>Public:</strong> {recipe.public ? "Yes" : "No"}
-            </p>
-            <button onClick={() => handleEdit(recipe)}>Edit</button>
-            <button onClick={() => handleDelete(recipe.id)}>Delete</button>
-          </div>
+          <Link to={`/recipes/${recipe.id}`}>
+            <div
+              key={recipe.id}
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                padding: "1rem",
+                width: "250px",
+                background: "#fafafa",
+              }}
+            >
+              <h3>{recipe.name}</h3>
+              <p>
+                <strong>Ingredients:</strong>{" "}
+                {Array.isArray(recipe.ingredients)
+                  ? recipe.ingredients.join(", ")
+                  : recipe.ingredients}
+              </p>
+              <p>
+                <strong>Prep Time:</strong> {recipe.preptime}
+              </p>
+              <p>
+                <strong>Tags:</strong>{" "}
+                {Array.isArray(recipe.tags)
+                  ? recipe.tags.join(", ")
+                  : recipe.tags}
+              </p>
+              <p>
+                <strong>Public:</strong> {recipe.public ? "Yes" : "No"}
+              </p>
+              <button onClick={() => handleEdit(recipe)}>Edit</button>
+              <button onClick={() => handleDelete(recipe.id)}>Delete</button>
+            </div>
+          </Link>
         ))}
       </div>
       <button
