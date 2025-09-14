@@ -3,7 +3,7 @@ function Account() {
 
 return (
     <section className="section" id="home">
-      <h1>Welcome to your Recipe Book</h1>
+      <h1>Welcome to your Recipe Book Account</h1>
 
       <div>
         <h2>Public Recipes</h2>

@@ -71,7 +71,7 @@ function Spices() {
       <h1>Spices</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
         {spices.map((spice) => (
-          <Link to={`/spices/${spice.id}`}>
+          <Link to={`/spices/${spice.id}`} key={spice.id}>
             <div
               key={spice.id}
               style={{
