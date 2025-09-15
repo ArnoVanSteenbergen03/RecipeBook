@@ -65,24 +65,27 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
 };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="modal__form" onSubmit={handleSubmit}>
       {fields.map((field) => (
-        <div key={field.name}>
-          <label>
+        <div className="form__item" key={field.name}>
+          <label className="form__label">
             {field.name}:
             {field.type === "textarea" ? (
               <textarea
+                className="form__text"
                 value={form[field.name] || ""}
                 onChange={(e) => handleChange(e, field)}
               />
             ) : field.type === "checkbox" ? (
               <input
+                className="form__checkbox"
                 type="checkbox"
                 checked={form[field.name] || false}
                 onChange={(e) => handleChange(e, field)}
               />
             ) : (
-              <input
+              <input 
+                className="form__input"
                 type={field.type}
                 value={form[field.name] || ""}
                 onChange={(e) => handleChange(e, field)}
@@ -91,7 +94,7 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
           </label>
         </div>
       ))}
-      <button type="submit">{editingId ? "Update" : "Add"}</button>
+      <button className="form__submit" type="submit">{editingId ? "Update" : "Add"}</button>
       {error && <div style={{ color: "red" }}>{error}</div>}
     </form>
   );

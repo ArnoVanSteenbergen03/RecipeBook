@@ -37,7 +37,7 @@ function Home() {
               {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                 recipe.tags.join(", ")
               ) : (
-                <span style={{ color: "#888" }}>No tags</span>
+                <span>No tags</span>
               )}
             </li>
           ))}
