@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+  GoogleAuthProvider,
+  getRedirectResult,
+  onAuthStateChanged,
+} from "firebase/auth";
 import app from "../../firebase";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -11,6 +18,12 @@ function Login() {
   const auth = getAuth();
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+      }
+    });
+
     getRedirectResult(auth)
       .then((result) => {
         if (result && result.user) {
@@ -18,13 +31,14 @@ function Login() {
         }
       })
       .catch((err) => setError(err.message));
+
+    return () => unsubscribe();
   }, [auth, navigate]);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
     } catch (err) {
       setError(err.message);
     }

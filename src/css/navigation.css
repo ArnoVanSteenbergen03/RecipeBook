@@ -19,28 +19,28 @@
 
 .nav__title {
   font-size: 1.5rem;
-    font-weight: bold;
-    color: transparent;
-    background-image: url('../../public/assets/images/titleBackground.jpg'); 
-    background-size: 200%;
-    background-position: 0 50%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: animate-background 5s infinite alternate linear;
+  font-weight: bold;
+  color: transparent;
+  background-image: url("../../public/assets/images/titleBackground.jpg");
+  background-size: 200%;
+  background-position: 0 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animate-background 5s infinite alternate linear;
 }
 
 @keyframes animate-background {
-    0% {
-        background-position: 0 50%;
-    }
-    100% {
-        background-position: 100% 50%;
-    }
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .nav__title:hover {
-    animation-play-state: paused;
+  animation-play-state: paused;
 }
 
 .nav__list {
@@ -77,7 +77,7 @@
 }
 
 .nav__link::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;

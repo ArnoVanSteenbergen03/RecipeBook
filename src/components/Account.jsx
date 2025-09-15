@@ -1,7 +1,6 @@
 import React from "react";
 function Account() {
-
-return (
+  return (
     <section className="section" id="home">
       <h1>Welcome to your Recipe Book Account</h1>
 

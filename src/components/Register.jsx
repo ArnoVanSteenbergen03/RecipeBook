@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -15,7 +15,11 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       const { getFirestore, doc, setDoc } = await import("firebase/firestore");
       const db = getFirestore();
@@ -24,7 +28,7 @@ function Register() {
         name: firstName,
         lastname: lastName,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
       });
       navigate("/");
     } catch (err) {

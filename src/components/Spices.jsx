@@ -71,32 +71,26 @@ function Spices() {
       <h1>Spices</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
         {spices.map((spice) => (
-          <Link to={`/spices/${spice.id}`} key={spice.id}>
-            <div
-              key={spice.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "1rem",
-                width: "250px",
-                background: "#fafafa",
-              }}
-            >
-              <h3>{spice.name}</h3>
-              <p>
-                <strong>Description:</strong> {spice.description}
-              </p>
-              <p>
-                <strong>Tags:</strong>{" "}
-                {Array.isArray(spice.tags) ? spice.tags.join(", ") : spice.tags}
-              </p>
-              <p>
-                <strong>Public:</strong> {spice.public ? "Yes" : "No"}
-              </p>
-              <button onClick={() => handleEdit(spice)}>Edit</button>
-              <button onClick={() => handleDelete(spice.id)}>Delete</button>
-            </div>
-          </Link>
+          <div
+            className="spice__card"
+            key={spice.id}
+            onClick={() => navigate(`/spices/${spice.id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <h3>{spice.name}</h3>
+            <p>
+              <strong>Description:</strong> {spice.description}
+            </p>
+            <p>
+              <strong>Tags:</strong>{" "}
+              {Array.isArray(spice.tags) ? spice.tags.join(", ") : spice.tags}
+            </p>
+            <p>
+              <strong>Public:</strong> {spice.public ? "Yes" : "No"}
+            </p>
+            <button onClick={() => handleEdit(spice)}>Edit</button>
+            <button onClick={() => handleDelete(spice.id)}>Delete</button>
+          </div>
         ))}
       </div>
 

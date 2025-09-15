@@ -5,7 +5,6 @@
 @import url("./account.css");
 @import url("./modal.css");
 
-
 :root {
   /* Primary Colors */
   --primary: #2563eb;
@@ -19,8 +18,8 @@
 
   /* Text Colors */
   --text-primary: #1e293b;
-  --text-secondary: #475569; 
-  --text-muted: #64748b; 
+  --text-secondary: #475569;
+  --text-muted: #64748b;
 
   /* Accent Colors */
   --accent: var(--primary);
@@ -36,9 +35,9 @@
 
 [data-theme="dark"] {
   /* Primary Colors */
-  --primary: #8b5cf6; 
-  --primary-light: #a78bfa; 
-  --primary-dark: #7c3aed; 
+  --primary: #8b5cf6;
+  --primary-light: #a78bfa;
+  --primary-dark: #7c3aed;
 
   /* Background Colors */
   --bg-primary: #0f0f23;

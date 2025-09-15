@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 
 function CrudComponent({ collectionName, fields, initialData, onSave }) {
   const [form, setForm] = useState(initialData || {});
@@ -24,45 +19,48 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const processedForm = { ...form };
-    fields.forEach((field) => {
-      if (["ingredients", "tags"].includes(field.name) && typeof processedForm[field.name] === "string") {
-        processedForm[field.name] = processedForm[field.name]
-          .split(",")
-          .map((item) => item.trim())
-          .filter((item) => item.length > 0);
-      }
-    });
+    e.preventDefault();
+    try {
+      const processedForm = { ...form };
+      fields.forEach((field) => {
+        if (
+          ["ingredients", "tags"].includes(field.name) &&
+          typeof processedForm[field.name] === "string"
+        ) {
+          processedForm[field.name] = processedForm[field.name]
+            .split(",")
+            .map((item) => item.trim())
+            .filter((item) => item.length > 0);
+        }
+      });
 
-    if (!editingId && collectionName === "recipes") {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        processedForm.author = user.uid;
+      if (!editingId && collectionName === "recipes") {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+          processedForm.author = user.uid;
+        }
       }
-    }
-    if (!editingId && collectionName === "spices") {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        processedForm.author = user.uid;
+      if (!editingId && collectionName === "spices") {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+          processedForm.author = user.uid;
+        }
       }
-    }
 
-    if (editingId) {
-      await updateDoc(doc(db, collectionName, editingId), processedForm);
-    } else {
-      await addDoc(collection(db, collectionName), processedForm);
+      if (editingId) {
+        await updateDoc(doc(db, collectionName, editingId), processedForm);
+      } else {
+        await addDoc(collection(db, collectionName), processedForm);
+      }
+      setForm({});
+      setError("");
+      if (onSave) onSave();
+    } catch (err) {
+      setError("Failed to save: " + err.message);
     }
-    setForm({});
-    setError("");
-    if (onSave) onSave();
-  } catch (err) {
-    setError("Failed to save: " + err.message);
-  }
-};
+  };
 
   return (
     <form className="modal__form" onSubmit={handleSubmit}>
@@ -84,7 +82,7 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
                 onChange={(e) => handleChange(e, field)}
               />
             ) : (
-              <input 
+              <input
                 className="form__input"
                 type={field.type}
                 value={form[field.name] || ""}
@@ -94,7 +92,9 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
           </label>
         </div>
       ))}
-      <button className="form__submit" type="submit">{editingId ? "Update" : "Add"}</button>
+      <button className="form__submit" type="submit">
+        {editingId ? "Update" : "Add"}
+      </button>
       {error && <div style={{ color: "red" }}>{error}</div>}
     </form>
   );

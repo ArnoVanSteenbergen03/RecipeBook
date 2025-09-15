@@ -11,12 +11,13 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function Recipes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [user, setUser] = useState(null);
 
   const fields = [
     { name: "name", type: "text" },
@@ -27,14 +28,28 @@ function Recipes() {
     { name: "public", type: "checkbox" },
   ];
 
-  const fetchUserRecipes = async () => {
+  useEffect(() => {
     const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        fetchUserRecipes(firebaseUser);
+      } else {
+        setRecipes([]);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const fetchUserRecipes = async (firebaseUser) => {
+    if (!firebaseUser) {
       setRecipes([]);
       return;
     }
-    const q = query(collection(db, "recipes"), where("author", "==", user.uid));
+    const q = query(
+      collection(db, "recipes"),
+      where("author", "==", firebaseUser.uid)
+    );
     const querySnapshot = await getDocs(q);
     const recipesList = [];
     querySnapshot.forEach((doc) => {
@@ -43,13 +58,11 @@ function Recipes() {
     setRecipes(recipesList);
   };
 
-  useEffect(() => {
-    fetchUserRecipes();
-  }, []);
-
   const handleDelete = async (id) => {
     await deleteDoc(doc(db, "recipes", id));
-    fetchUserRecipes();
+    if (user) {
+      fetchUserRecipes(user);
+    }
   };
 
   const handleEdit = (recipe) => {
@@ -65,48 +78,58 @@ function Recipes() {
   const handleSave = () => {
     setIsModalOpen(false);
     setSelectedRecipe(null);
-    fetchUserRecipes();
+    if (user) {
+      fetchUserRecipes(user);
+    }
   };
 
   return (
     <div>
-      <h1>Recipes</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+      <h1>Your Recipes</h1>
+      <div className="recipes__list">
         {recipes.map((recipe) => (
-          <Link to={`/recipes/${recipe.id}`} key={recipe.id}>
-            <div
-              key={recipe.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "1rem",
-                width: "250px",
-                background: "#fafafa",
+          <div
+            className="recipe__card"
+            key={recipe.id}
+            onClick={() => navigate(`/recipes/${recipe.id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <h3 className="card__title">{recipe.name}</h3>
+            <p className="card__ingredients">
+              <strong>Ingredients:</strong>{" "}
+              {Array.isArray(recipe.ingredients)
+                ? recipe.ingredients.join(", ")
+                : recipe.ingredients}
+            </p>
+            <p className="card__preptime">
+              <strong>Prep Time:</strong> {recipe.preptime}
+            </p>
+            <p className="card__tags">
+              <strong>Tags:</strong>{" "}
+              {Array.isArray(recipe.tags)
+                ? recipe.tags.join(", ")
+                : recipe.tags}
+            </p>
+            <p className="card__public">
+              <strong>Public:</strong> {recipe.public ? "Yes" : "No"}
+            </p>
+            <button
+              className="card__edit-button"
+              onClick={() => {
+                handleEdit(recipe);
               }}
             >
-              <h3>{recipe.name}</h3>
-              <p>
-                <strong>Ingredients:</strong>{" "}
-                {Array.isArray(recipe.ingredients)
-                  ? recipe.ingredients.join(", ")
-                  : recipe.ingredients}
-              </p>
-              <p>
-                <strong>Prep Time:</strong> {recipe.preptime}
-              </p>
-              <p>
-                <strong>Tags:</strong>{" "}
-                {Array.isArray(recipe.tags)
-                  ? recipe.tags.join(", ")
-                  : recipe.tags}
-              </p>
-              <p>
-                <strong>Public:</strong> {recipe.public ? "Yes" : "No"}
-              </p>
-              <button onClick={() => handleEdit(recipe)}>Edit</button>
-              <button onClick={() => handleDelete(recipe.id)}>Delete</button>
-            </div>
-          </Link>
+              Edit
+            </button>
+            <button
+              className="card__delete-button"
+              onClick={() => {
+                handleDelete(recipe.id);
+              }}
+            >
+              Delete
+            </button>
+          </div>
         ))}
       </div>
       <button
