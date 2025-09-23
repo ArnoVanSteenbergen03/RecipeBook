@@ -37,37 +37,41 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+    <div className="login">
+      <h2 className="login__title">Register</h2>
+      <form onSubmit={handleRegister} className="login__form">
         <input
+          className="login__input"
           type="text"
           placeholder="First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
         <input
+          className="login__input"
           type="text"
           placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
         <input
+          className="login__input"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          className="login__input"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="login__button">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div style={{ marginTop: "1em" }}>
+      <div style={{ marginTop: "1em" }} className="login__register-link">
         <Link to="/login">Already have an account? Login</Link>
       </div>
     </div>
