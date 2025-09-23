@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
-  signInWithRedirect,
-  GoogleAuthProvider,
   getRedirectResult,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -44,35 +42,27 @@ function Login() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithRedirect(auth, provider);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleEmailLogin}>
+    <div className="login">
+      <h2 className="login__title">Login</h2>
+      <form onSubmit={handleEmailLogin} className="login__form">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="login__input"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="login__input"
         />
-        <button type="submit">Login</button>
+        <button type="submit" className="login__button">Login</button>
       </form>
-      <button onClick={handleGoogleLogin}>Login with Google</button>
-      <div style={{ marginTop: "1em" }}>
+      <div style={{ marginTop: "1em" }} className="login__register-link">
         <Link to="/register">Don't have an account? Register</Link>
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
