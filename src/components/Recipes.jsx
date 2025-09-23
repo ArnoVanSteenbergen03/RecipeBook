@@ -114,8 +114,8 @@ function Recipes() {
   };
 
   return (
-    <div>
-      <h1>Your Recipes</h1>
+    <div className="recipes">
+      <h1 className="recipes__title">Your Recipes</h1>
       <div className="recipes__list">
         {recipes.map((recipe) => (
           <div
@@ -149,24 +149,26 @@ function Recipes() {
                 ? recipe.spices.map((id) => spicesMap[id] || id).join(", ")
                 : "None"}
             </p>
-            <button
-              className="card__edit-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit(recipe);
-              }}
-            >
-              Edit
-            </button>
-            <button
-              className="card__delete-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(recipe.id);
-              }}
-            >
-              Delete
-            </button>
+            <div className="recipe__buttons">
+              <button
+                className="card__edit-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(recipe);
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="card__delete-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(recipe.id);
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CrudComponent from "./CRUD";
 import Modal from "./Modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import {
   collection,
@@ -17,6 +17,7 @@ function Spices() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [spices, setSpices] = useState([]);
   const [selectedSpice, setSelectedSpice] = useState(null);
+  const navigate = useNavigate();
 
   const fields = [
     { name: "name", type: "text" },
@@ -67,9 +68,9 @@ function Spices() {
   };
 
   return (
-    <div>
-      <h1>Spices</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+    <div className="spices">
+      <h1 className="spices__title">Spices</h1>
+      <div className="spices__list">
         {spices.map((spice) => (
           <div
             className="spice__card"
@@ -77,19 +78,37 @@ function Spices() {
             onClick={() => navigate(`/spices/${spice.id}`)}
             style={{ cursor: "pointer" }}
           >
-            <h3>{spice.name}</h3>
-            <p>
+            <h3 className="spice__title">{spice.name}</h3>
+            <p className="spice__description">
               <strong>Description:</strong> {spice.description}
             </p>
-            <p>
+            <p className="spice__tags">
               <strong>Tags:</strong>{" "}
               {Array.isArray(spice.tags) ? spice.tags.join(", ") : spice.tags}
             </p>
-            <p>
+            <p className="spice__public">
               <strong>Public:</strong> {spice.public ? "Yes" : "No"}
             </p>
-            <button onClick={() => handleEdit(spice)}>Edit</button>
-            <button onClick={() => handleDelete(spice.id)}>Delete</button>
+            <div className="spice__buttons">
+            <button
+              className="spice__edit-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit(spice);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="spice__delete-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(spice.id);
+              }}
+            >
+              Delete
+            </button>
+            </div>
           </div>
         ))}
       </div>
