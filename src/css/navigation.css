@@ -32,6 +32,7 @@
 
 [data-theme="dark"] .nav__title {
   background-image: url("../../public/assets/images/titleBackground_dark.jpg");
+  text-shadow: 0 2px 12px rgba(60, 130, 246, 0.35), 0 0 2px #454545;
 }
 
 @keyframes animate-background {

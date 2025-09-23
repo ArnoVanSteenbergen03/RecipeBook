@@ -113,21 +113,7 @@ function Spices() {
         ))}
       </div>
 
-      <button
-        style={{
-          fontSize: "2rem",
-          borderRadius: "50%",
-          width: "48px",
-          height: "48px",
-          background: "#4f46e5",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-          zIndex: 1000,
-        }}
+      <button className="add__btn"
         onClick={handleAdd}
         aria-label="Add Spice"
       >
