@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CrudComponent from "./CRUD";
 import Modal from "./Modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import {
   collection,
@@ -18,6 +18,8 @@ function Recipes() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [user, setUser] = useState(null);
+  const [spicesMap, setSpicesMap] = useState({});
+  const navigate = useNavigate();
 
   const fields = [
     { name: "name", type: "text" },
@@ -34,8 +36,10 @@ function Recipes() {
       setUser(firebaseUser);
       if (firebaseUser) {
         fetchUserRecipes(firebaseUser);
+        fetchSpices(firebaseUser);
       } else {
         setRecipes([]);
+        setSpicesMap({});
       }
     });
     return () => unsubscribe();
@@ -56,6 +60,32 @@ function Recipes() {
       recipesList.push({ id: doc.id, ...doc.data() });
     });
     setRecipes(recipesList);
+  };
+
+  const fetchSpices = async (firebaseUser) => {
+    const spicesRef = collection(db, "spices");
+    const publicQ = query(spicesRef, where("isPublic", "==", true));
+    let spices = [];
+    const publicSnap = await getDocs(publicQ);
+    spices = publicSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    if (firebaseUser) {
+      const userQ = query(spicesRef, where("author", "==", firebaseUser.uid));
+      const userSnap = await getDocs(userQ);
+      const userSpices = userSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      spices = [
+        ...spices,
+        ...userSpices.filter((s) => !spices.some((ps) => ps.id === s.id)),
+      ];
+    }
+    const map = {};
+    spices.forEach((spice) => {
+      map[spice.id] = spice.name;
+    });
+    setSpicesMap(map);
   };
 
   const handleDelete = async (id) => {
@@ -113,9 +143,16 @@ function Recipes() {
             <p className="card__public">
               <strong>Public:</strong> {recipe.public ? "Yes" : "No"}
             </p>
+            <p className="card__spices">
+              <strong>Spices:</strong>{" "}
+              {Array.isArray(recipe.spices) && recipe.spices.length > 0
+                ? recipe.spices.map((id) => spicesMap[id] || id).join(", ")
+                : "None"}
+            </p>
             <button
               className="card__edit-button"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 handleEdit(recipe);
               }}
             >
@@ -123,7 +160,8 @@ function Recipes() {
             </button>
             <button
               className="card__delete-button"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 handleDelete(recipe.id);
               }}
             >

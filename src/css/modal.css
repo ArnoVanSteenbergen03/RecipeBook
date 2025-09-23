@@ -11,6 +11,7 @@
   z-index: 999;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  overflow: auto;
 }
 
 .modal__container {
@@ -26,6 +27,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal__close {
@@ -119,11 +122,14 @@
     width: 100%;
     border-radius: 6px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    max-height: 95vh;
+    overflow-y: auto;
   }
   .modal__close {
     top: 6px;
     right: 6px;
     font-size: 1.2rem;
+    margin-bottom: 0.5rem;
   }
   .modal__form {
     max-width: 100%;

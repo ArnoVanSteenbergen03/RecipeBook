@@ -1,21 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 function CrudComponent({ collectionName, fields, initialData, onSave }) {
   const [form, setForm] = useState(initialData || {});
   const [editingId, setEditingId] = useState(initialData?.id || null);
   const [error, setError] = useState("");
+  const [spicesList, setSpicesList] = useState([]);
+  const [spiceSearch, setSpiceSearch] = useState("");
+  const [selectedSpices, setSelectedSpices] = useState(
+    initialData?.spices || []
+  );
 
   useEffect(() => {
     setForm(initialData || {});
     setEditingId(initialData?.id || null);
+    setSelectedSpices(initialData?.spices || []);
   }, [initialData]);
+
+  useEffect(() => {
+    const fetchSpices = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const spicesRef = collection(db, "spices");
+      const publicQ = query(spicesRef, where("isPublic", "==", true));
+      let spices = [];
+      const publicSnap = await getDocs(publicQ);
+      spices = publicSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      if (user) {
+        const userQ = query(spicesRef, where("author", "==", user.uid));
+        const userSnap = await getDocs(userQ);
+        const userSpices = userSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        spices = [
+          ...spices,
+          ...userSpices.filter((s) => !spices.some((ps) => ps.id === s.id)),
+        ];
+      }
+      setSpicesList(spices);
+    };
+    if (collectionName === "recipes") fetchSpices();
+  }, [collectionName]);
 
   const handleChange = (e, field) => {
     const value = field.type === "checkbox" ? e.target.checked : e.target.value;
     setForm({ ...form, [field.name]: value });
+  };
+
+  const handleSpiceToggle = (id) => {
+    setSelectedSpices((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -33,6 +80,10 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
             .filter((item) => item.length > 0);
         }
       });
+
+      if (collectionName === "recipes") {
+        processedForm.spices = selectedSpices;
+      }
 
       if (!editingId && collectionName === "recipes") {
         const auth = getAuth();
@@ -92,6 +143,41 @@ function CrudComponent({ collectionName, fields, initialData, onSave }) {
           </label>
         </div>
       ))}
+      {collectionName === "recipes" && (
+        <div className="form__item">
+          <label className="form__label">Spices:</label>
+          <input
+            type="text"
+            placeholder="Search spices..."
+            value={spiceSearch}
+            onChange={(e) => setSpiceSearch(e.target.value)}
+            className="form__input"
+            style={{ marginBottom: "0.5em" }}
+          />
+          <div
+            className="spices__list"
+            style={{ maxHeight: "150px", overflowY: "auto" }}
+          >
+            {spicesList
+              .filter((spice) =>
+                spice.name.toLowerCase().includes(spiceSearch.toLowerCase())
+              )
+              .map((spice) => (
+                <div key={spice.id}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedSpices.includes(spice.id)}
+                      onChange={() => handleSpiceToggle(spice.id)}
+                    />
+                    {spice.name}
+                  </label>
+                </div>
+              ))}
+            {spicesList.length === 0 && <div>No spices found.</div>}
+          </div>
+        </div>
+      )}
       <button className="form__submit" type="submit">
         {editingId ? "Update" : "Add"}
       </button>
