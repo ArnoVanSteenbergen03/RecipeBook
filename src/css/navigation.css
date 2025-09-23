@@ -30,6 +30,10 @@
   animation: animate-background 5s infinite alternate linear;
 }
 
+[data-theme="dark"] .nav__title {
+  background-image: url("../../public/assets/images/titleBackground_dark.jpg");
+}
+
 @keyframes animate-background {
   0% {
     background-position: 0 50%;

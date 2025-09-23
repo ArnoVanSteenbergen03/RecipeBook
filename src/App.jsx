@@ -11,6 +11,7 @@ import RequireAuth from "./components/RequireAuth";
 import Account from "./components/Account";
 import RecipeDetail from "./components/RecipeDetail";
 import SpicesDetail from "./components/SpicesDetail";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
   const location = useLocation();
@@ -79,6 +80,7 @@ function App() {
           }
         />
       </Routes>
+      <ThemeToggle />
     </div>
   );
 }
