@@ -9,7 +9,7 @@
   margin-top: 1.5rem;
   font-size: 2rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .spices__list {
@@ -21,12 +21,12 @@
 }
 
 .spice__card {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.2rem;
   width: 240px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--bg-primary);
+  box-shadow: 0 2px 8px var(--shadow);
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
@@ -38,20 +38,20 @@
 
 .spice__card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 18px var(--shadow);
 }
 
 .spice__title {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.3rem;
-  color: #333;
+  color: var(--text-primary);
 }
 .spice__description,
 .spice__tags,
 .spice__public {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-top: 0.2rem;
   word-break: break-word;
 }
@@ -76,14 +76,14 @@
 }
 
 .spice__edit-button {
-  background-color: #1976d2;
+  background-color: var(--primary);
   color: #fff;
 }
 .spice__edit-button:hover {
-  background-color: #1565c0;
+  background-color: var(--primary-dark);
 }
 .spice__delete-button {
-  background-color: #e53935;
+  background-color: #e53935; 
   color: #fff;
 }
 .spice__delete-button:hover {

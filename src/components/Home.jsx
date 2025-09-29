@@ -4,6 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 function Home() {
   const [publicRecipes, setPublicRecipes] = useState([]);
+  const [publicSpices, setPublicSpices] = useState([]);
 
   useEffect(() => {
     const fetchPublicRecipes = async () => {
@@ -15,7 +16,17 @@ function Home() {
       });
       setPublicRecipes(recipesList);
     };
+    const fetchPublicSpices = async () => {
+      const q = query(collection(db, "spices"), where("public", "==", true));
+      const querySnapshot = await getDocs(q);
+      const spicesList = [];
+      querySnapshot.forEach((doc) => {
+        spicesList.push({ id: doc.id, ...doc.data() });
+      });
+      setPublicSpices(spicesList);
+    };
     fetchPublicRecipes();
+    fetchPublicSpices();
   }, []);
 
   return (
@@ -36,6 +47,28 @@ function Home() {
               <strong>Tags:</strong>{" "}
               {Array.isArray(recipe.tags) && recipe.tags.length > 0 ? (
                 recipe.tags.join(", ")
+              ) : (
+                <span>No tags</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2>Public Spices</h2>
+
+        <ul>
+          {publicSpices.map((spice) => (
+            <li key={spice.id}>
+              <strong>{spice.name}</strong>:{" "}
+              {Array.isArray(spice.ingredients)
+                ? spice.ingredients.join(", ")
+                : ""}
+              <br />
+              <strong>Tags:</strong>{" "}
+              {Array.isArray(spice.tags) && spice.tags.length > 0 ? (
+                spice.tags.join(", ")
               ) : (
                 <span>No tags</span>
               )}
